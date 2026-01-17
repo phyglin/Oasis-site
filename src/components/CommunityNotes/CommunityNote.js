@@ -1,5 +1,13 @@
-import React, { useState } from "react";
-import { Award, ThumbsUp, ThumbsDown, ShieldCheck } from "lucide-react";
+import React from "react";
+import {
+  Award,
+  ThumbsUp,
+  ThumbsDown,
+  ShieldCheck,
+  GitPullRequest,
+  Scale,
+  AlertCircle,
+} from "lucide-react";
 import { statuses, noteCategories } from "../../data/statuses";
 
 function CommunityNote({ note, isTop, onVote }) {
@@ -31,7 +39,7 @@ function CommunityNote({ note, isTop, onVote }) {
                 </span>
               ))}
             {note.supportedByExperts > 0 && (
-              <span className="flex items-center gap-1 px-2 py-0.5 bg-emerald-500/10 text-emerald-400 rounded-full text-[10px] font-bold border border-emerald-500/20">
+              <span className="flex items-center gap-1 px-2 py-0.5 bg-green-500/10 text-green-400 rounded-full text-[10px] font-bold border border-green-500/20">
                 <ShieldCheck size={10} />
                 Supported by {note.supportedByExperts} experts
               </span>
@@ -41,6 +49,41 @@ function CommunityNote({ note, isTop, onVote }) {
           <p className="text-sm text-gray-200 leading-relaxed mb-3">
             {note.content}
           </p>
+
+          {/* Detailed Context Sections */}
+          {(note.changes || note.reasoning || note.impact) && (
+            <div className="mt-3 mb-3 space-y-3 pt-3 border-t border-white/10">
+              {note.changes && (
+                <div className="text-xs">
+                  <div className="flex items-center gap-2 font-semibold text-gray-300 mb-1">
+                    <GitPullRequest size={12} className="text-blue-400" />
+                    <span>Proposed Changes</span>
+                  </div>
+                  <p className="text-gray-400 pl-5">{note.changes}</p>
+                </div>
+              )}
+
+              {note.reasoning && (
+                <div className="text-xs">
+                  <div className="flex items-center gap-2 font-semibold text-gray-300 mb-1">
+                    <Scale size={12} className="text-amber-400" />
+                    <span>Reasoning</span>
+                  </div>
+                  <p className="text-gray-400 pl-5">{note.reasoning}</p>
+                </div>
+              )}
+
+              {note.impact && (
+                <div className="text-xs">
+                  <div className="flex items-center gap-2 font-semibold text-gray-300 mb-1">
+                    <AlertCircle size={12} className="text-purple-400" />
+                    <span>Impact Analysis</span>
+                  </div>
+                  <p className="text-gray-400 pl-5">{note.impact}</p>
+                </div>
+              )}
+            </div>
+          )}
 
           <div className="flex flex-col gap-2 mb-3">
             {note.sources && note.sources.length > 0 && (

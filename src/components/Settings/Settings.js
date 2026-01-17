@@ -21,9 +21,9 @@ function Settings() {
   };
 
   return (
-    <div className="min-h-full bg-white dark:bg-[#0f172a]/30 dark:backdrop-blur-md">
-      <div className="py-8 text-center border-b border-gray-200 dark:border-indigo-500/20 mb-6">
-        <h2 className="text-4xl font-display font-bold text-gray-900 dark:text-indigo-100">
+    <div className="min-h-full bg-white dark:bg-black/20 dark:backdrop-blur-xl">
+      <div className="py-8 text-center border-b border-gray-200 dark:border-white/10 mb-6">
+        <h2 className="text-4xl font-display font-bold text-gray-800 dark:text-gray-100">
           Settings
         </h2>
       </div>

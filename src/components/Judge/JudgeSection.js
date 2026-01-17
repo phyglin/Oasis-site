@@ -69,7 +69,7 @@ function JudgeSection({ cases, onSubmitVote, isVerified, onPin }) {
 
     if (canVote) {
       return (
-        <div className="min-h-full bg-white dark:bg-[#0f172a]/30 dark:backdrop-blur-md">
+        <div className="min-h-full bg-white dark:bg-black/20 dark:backdrop-blur-xl">
           <div className="px-4 py-4">
             <button
               onClick={() => setSelectedCase(null)}
@@ -90,7 +90,7 @@ function JudgeSection({ cases, onSubmitVote, isVerified, onPin }) {
     }
 
     return (
-      <div className="min-h-full bg-white dark:bg-[#0f172a]/30 dark:backdrop-blur-md">
+      <div className="min-h-full bg-white dark:bg-black/20 dark:backdrop-blur-xl">
         <CaseDetails
           caseData={selectedCase}
           onBack={() => setSelectedCase(null)}
@@ -100,9 +100,9 @@ function JudgeSection({ cases, onSubmitVote, isVerified, onPin }) {
   }
 
   return (
-    <div className="min-h-full bg-white dark:bg-[#0f172a]/30 dark:backdrop-blur-md pb-8">
-      <div className="py-8 text-center border-b border-gray-200 dark:border-indigo-500/20 mb-6">
-        <h2 className="text-4xl font-display font-bold text-gray-800 dark:text-indigo-100 mb-2">
+    <div className="min-h-full bg-white dark:bg-black/20 dark:backdrop-blur-xl pb-8">
+      <div className="py-8 text-center border-b border-gray-200 dark:border-white/10 mb-6">
+        <h2 className="text-4xl font-display font-bold text-gray-800 dark:text-gray-100 mb-2">
           Community Justice System
         </h2>
         <p className="text-gray-600 dark:text-indigo-300 text-sm">

@@ -5,6 +5,9 @@ import FilterPanel from "./components/FilterPanel";
 import VoteSection from "./components/Vote/VoteSection";
 import JudgeSection from "./components/Judge/JudgeSection";
 import ProfileSection from "./components/Profile/ProfileSection";
+import VerificationSection from "./components/Verification/VerificationSection";
+import RulesSection from "./components/Rules/RulesSection";
+import NotificationsSection from "./components/Notifications/NotificationsSection";
 import Settings from "./components/Settings/Settings";
 import { statuses } from "./data/statuses";
 import { initialProposals } from "./data/proposals";
@@ -81,6 +84,30 @@ function App() {
     );
   };
 
+  const signPetition = (proposalId) => {
+    setVoteProposals((prev) =>
+      prev.map((proposal) => {
+        if (proposal.id === proposalId) {
+          const newSignatures = (proposal.signatures || 0) + 1;
+          const requiredSignatures = proposal.requiredSignatures || 6000;
+
+          // Check if threshold reached
+          let newStatus = proposal.status;
+          if (newSignatures >= requiredSignatures) {
+            newStatus = "open"; // Move to active voting
+          }
+
+          return {
+            ...proposal,
+            signatures: newSignatures,
+            status: newStatus,
+          };
+        }
+        return proposal;
+      }),
+    );
+  };
+
   const submitProposal = () => {
     if (!newProposal.title.trim() || !newProposal.description.trim()) return;
 
@@ -93,7 +120,9 @@ function App() {
       authorStatus: "real",
       upvotes: 0,
       downvotes: 0,
-      status: "open",
+      signatures: 1, // Auto-sign by author
+      requiredSignatures: 6000,
+      status: "petition",
       isDeveloper: false,
       isCritical: false,
       createdAt: "0m",
@@ -291,10 +320,20 @@ function App() {
 
         <div className="flex-1 overflow-y-auto">
           <div>
-            {activeMenu === "vote" ? (
+            {activeMenu === "get-verified" ? (
+              <VerificationSection />
+            ) : activeMenu === "constitution" || activeMenu === "terms" ? (
+              <RulesSection
+                activeTab={activeMenu}
+                onTabChange={handleMenuChange}
+              />
+            ) : activeMenu === "notifications" ? (
+              <NotificationsSection />
+            ) : activeMenu === "vote" ? (
               <VoteSection
                 proposals={voteProposals}
                 onVote={voteOnProposal}
+                onSign={signPetition}
                 showNewProposal={showNewProposal}
                 setShowNewProposal={setShowNewProposal}
                 newProposal={newProposal}
@@ -344,6 +383,7 @@ function App() {
           isVerified={isVerified}
           activeMenu={activeMenu}
           pinnedItems={pinnedItems}
+          onMenuChange={handleMenuChange}
         />
       </div>
     </div>

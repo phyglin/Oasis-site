@@ -56,6 +56,10 @@ export const statusColors = {
     "bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20",
   "under-review":
     "bg-yellow-500/10 text-yellow-700 dark:text-yellow-300 border border-yellow-500/20",
+  petition:
+    "bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 border border-indigo-500/20",
+  passed:
+    "bg-green-500/10 text-green-700 dark:text-green-300 border border-green-500/20",
   approved:
     "bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/20",
   rejected:

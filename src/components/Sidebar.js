@@ -1,5 +1,14 @@
 import React from "react";
-import { Home, CheckCircle, Vote, User, Settings, Scale } from "lucide-react";
+import {
+  Home,
+  CheckCircle,
+  Vote,
+  User,
+  Settings,
+  Scale,
+  Book,
+  Bell,
+} from "lucide-react";
 
 const menuItems = [
   {
@@ -9,6 +18,16 @@ const menuItems = [
     special: true,
   },
   { id: "public-square", icon: Home, label: "Public square" },
+  { id: "notifications", icon: Bell, label: "Notifications" },
+  {
+    id: "rules",
+    icon: Book,
+    label: "Rules",
+    subItems: [
+      { id: "constitution", label: "Constitution" },
+      { id: "terms", label: "Terms of Service" },
+    ],
+  },
   { id: "vote", icon: Vote, label: "Vote" },
   { id: "judge", icon: Scale, label: "Judge" },
   { id: "profile", icon: User, label: "Profile" },
@@ -162,6 +181,44 @@ function Sidebar({ activeMenu, onMenuChange, isVerified }) {
           .filter((item) => !(isVerified && item.id === "get-verified"))
           .map((item) => {
             const Icon = item.icon;
+            const isActive =
+              activeMenu === item.id ||
+              (item.subItems && item.subItems.some((s) => s.id === activeMenu));
+
+            if (item.subItems) {
+              return (
+                <div key={item.id}>
+                  <button
+                    onClick={() => onMenuChange(item.subItems[0].id)}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-md transition-all duration-200 ${
+                      isActive
+                        ? "border-l-2 border-indigo-600 dark:border-white bg-gray-50 dark:bg-white/10 text-indigo-900 dark:text-white"
+                        : "border-l-2 border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5"
+                    }`}
+                  >
+                    <Icon size={20} />
+                    <span className="font-medium">{item.label}</span>
+                  </button>
+                  {isActive && (
+                    <div className="ml-4 pl-4 border-l border-gray-200 dark:border-white/10 space-y-1 my-1">
+                      {item.subItems.map((sub) => (
+                        <button
+                          key={sub.id}
+                          onClick={() => onMenuChange(sub.id)}
+                          className={`w-full text-left px-3 py-2 text-sm rounded-md transition-colors ${
+                            activeMenu === sub.id
+                              ? "text-indigo-600 dark:text-indigo-300 bg-indigo-50 dark:bg-white/5 font-medium"
+                              : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5"
+                          }`}
+                        >
+                          {sub.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            }
 
             return (
               <button

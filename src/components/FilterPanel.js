@@ -12,6 +12,7 @@ function FilterPanel({
   isVerified,
   activeMenu = "public-square",
   pinnedItems = [],
+  onMenuChange,
 }) {
   const showFilters = activeMenu === "public-square";
 
@@ -80,7 +81,10 @@ function FilterPanel({
               Verification grants you the right to vote on proposals and
               participate in the community justice system.
             </p>
-            <button className="w-full px-4 py-2 bg-amber-100 text-amber-900 dark:bg-amber-500/20 dark:text-amber-200 dark:border dark:border-amber-500/30 dark:shadow-[0_0_15px_rgba(245,158,11,0.15)] hover:bg-amber-200 dark:hover:bg-amber-500/30 rounded-lg text-sm font-medium transition-all">
+            <button
+              onClick={() => onMenuChange("get-verified")}
+              className="w-full px-4 py-2 bg-amber-100 text-amber-900 dark:bg-amber-500/20 dark:text-amber-200 dark:border dark:border-amber-500/30 dark:shadow-[0_0_15px_rgba(245,158,11,0.15)] hover:bg-amber-200 dark:hover:bg-amber-500/30 rounded-lg text-sm font-medium transition-all"
+            >
               Get Verified
             </button>
           </>

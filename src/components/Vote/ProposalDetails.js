@@ -1,8 +1,14 @@
 import React from "react";
-import { ArrowLeft, Check, X, Clock } from "lucide-react";
+import { ArrowLeft, Check, X, Clock, PenTool } from "lucide-react";
 import { statuses, categoryColors, statusColors } from "../../data/statuses";
 
-function ProposalDetails({ proposal, onVote, onBack, isVerified }) {
+function ProposalDetails({
+  proposal,
+  onVote,
+  onSign,
+  onBack,
+  isVerified,
+}) {
   // Mock data for detailed sections since it's not in the initial data structure
   const details = {
     changes:
@@ -13,6 +19,9 @@ function ProposalDetails({ proposal, onVote, onBack, isVerified }) {
       "Users will see a new interface for this feature. No downtime is expected, but you might need to refresh the page once the update is live.",
     ...proposal,
   };
+
+  const isPetition = proposal.status === "petition";
+  const isHistory = ["passed", "rejected"].includes(proposal.status);
 
   return (
     <div className="p-6">
@@ -27,12 +36,16 @@ function ProposalDetails({ proposal, onVote, onBack, isVerified }) {
       <div className="bg-white dark:bg-black/20 rounded-xl p-8 border border-gray-200 dark:border-indigo-500/20">
         <div className="flex flex-wrap gap-2 mb-4">
           <span
-            className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${categoryColors[proposal.category]}`}
+            className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
+              categoryColors[proposal.category]
+            }`}
           >
             {proposal.category}
           </span>
           <span
-            className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${statusColors[proposal.status]}`}
+            className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
+              statusColors[proposal.status]
+            }`}
           >
             {proposal.status.replace("-", " ")}
           </span>
@@ -99,35 +112,103 @@ function ProposalDetails({ proposal, onVote, onBack, isVerified }) {
         </div>
 
         <div className="flex items-center justify-between bg-gray-50 dark:bg-indigo-900/20 p-6 rounded-xl border border-gray-200 dark:border-indigo-500/20">
-          <div className="flex-1">
-            <h4 className="font-bold text-gray-900 dark:text-indigo-100 mb-1">
-              Cast Your Vote
-            </h4>
-            <p className="text-sm text-gray-500 dark:text-indigo-300/60">
-              {isVerified
-                ? "Your vote is recorded on-chain."
-                : "Verification required to participate."}
-            </p>
-          </div>
+          {isPetition ? (
+            <div className="w-full">
+              <h4 className="font-bold text-gray-900 dark:text-indigo-100 mb-1">
+                Sign this Petition
+              </h4>
+              <p className="text-sm text-gray-500 dark:text-indigo-300/60 mb-4">
+                This proposal needs {proposal.requiredSignatures} signatures to
+                reach a vote.
+              </p>
+              <div className="flex items-center gap-4">
+                <div className="flex-1">
+                  <div className="flex items-center justify-between text-xs mb-1">
+                    <span className="text-gray-600 dark:text-indigo-200">
+                      <strong>{proposal.signatures.toLocaleString()}</strong>{" "}
+                      signatures
+                    </span>
+                    <span className="text-gray-500 dark:text-indigo-300/60">
+                      Target: {proposal.requiredSignatures.toLocaleString()}
+                    </span>
+                  </div>
+                  <div className="w-full bg-gray-200 dark:bg-indigo-500/20 rounded-full h-2 overflow-hidden">
+                    <div
+                      className="bg-blue-600 dark:bg-indigo-500 h-full rounded-full transition-all duration-500"
+                      style={{
+                        width: `${Math.min(
+                          (proposal.signatures / proposal.requiredSignatures) *
+                            100,
+                          100
+                        )}%`,
+                      }}
+                    ></div>
+                  </div>
+                </div>
+                <button
+                  onClick={() => onSign && onSign(proposal.id)}
+                  disabled={!isVerified}
+                  className="flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 dark:bg-indigo-600 dark:hover:bg-indigo-500 text-white rounded-lg font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <PenTool size={20} />
+                  <span>Sign Petition</span>
+                </button>
+              </div>
+            </div>
+          ) : isHistory ? (
+            <div className="w-full flex items-center justify-between">
+              <div>
+                <h4 className="font-bold text-gray-900 dark:text-indigo-100 mb-1">
+                  Proposal Ended
+                </h4>
+                <p className="text-sm text-gray-500 dark:text-indigo-300/60">
+                  This proposal was {proposal.status}.
+                </p>
+              </div>
+              <div className="flex items-center gap-4 text-2xl font-bold">
+                <div className="flex items-center gap-2 text-green-600 dark:text-green-400">
+                  <Check size={24} />
+                  <span>{proposal.upvotes}</span>
+                </div>
+                <div className="flex items-center gap-2 text-red-600 dark:text-red-400">
+                  <X size={24} />
+                  <span>{proposal.downvotes}</span>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className="flex-1">
+                <h4 className="font-bold text-gray-900 dark:text-indigo-100 mb-1">
+                  Cast Your Vote
+                </h4>
+                <p className="text-sm text-gray-500 dark:text-indigo-300/60">
+                  {isVerified
+                    ? "Your vote is recorded on-chain."
+                    : "Verification required to participate."}
+                </p>
+              </div>
 
-          <div className="flex gap-4">
-            <button
-              onClick={() => onVote(proposal.id, "up")}
-              disabled={!isVerified}
-              className="flex items-center gap-2 px-6 py-3 bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-900/30 rounded-lg font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <Check size={20} />
-              <span>Yes ({proposal.upvotes})</span>
-            </button>
-            <button
-              onClick={() => onVote(proposal.id, "down")}
-              disabled={!isVerified}
-              className="flex items-center gap-2 px-6 py-3 bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/30 rounded-lg font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <X size={20} />
-              <span>No ({proposal.downvotes})</span>
-            </button>
-          </div>
+              <div className="flex gap-4">
+                <button
+                  onClick={() => onVote(proposal.id, "up")}
+                  disabled={!isVerified}
+                  className="flex items-center gap-2 px-6 py-3 bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-900/30 rounded-lg font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <Check size={20} />
+                  <span>Yes ({proposal.upvotes})</span>
+                </button>
+                <button
+                  onClick={() => onVote(proposal.id, "down")}
+                  disabled={!isVerified}
+                  className="flex items-center gap-2 px-6 py-3 bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/30 rounded-lg font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <X size={20} />
+                  <span>No ({proposal.downvotes})</span>
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

@@ -12,7 +12,7 @@ function ProfileSection({
   isVerified,
 }) {
   return (
-    <div className="min-h-full bg-white dark:bg-[#0f172a]/30 dark:backdrop-blur-md p-6">
+    <div className="min-h-full bg-white dark:bg-black/20 dark:backdrop-blur-xl p-6">
       <ProfileHeader profile={profile} onUpdateProfile={onUpdateProfile} />
 
       <ProfileStats

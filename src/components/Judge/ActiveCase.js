@@ -19,7 +19,7 @@ function ActiveCase({ caseData, onSubmitVote }) {
 
   if (caseData.currentUserVoted) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 mb-6">
+      <div className="bg-white dark:glass-panel rounded-lg border border-gray-200 dark:border-white/10 p-6 mb-6">
         <div className="text-center py-8">
           <Scale
             className="mx-auto mb-4 text-green-600 dark:text-green-500"
@@ -38,7 +38,7 @@ function ActiveCase({ caseData, onSubmitVote }) {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 mb-6">
+    <div className="bg-white dark:glass-panel rounded-lg border border-gray-200 dark:border-white/10 p-6 mb-6">
       <div className="flex items-center gap-3 mb-6">
         <AlertTriangle
           className="text-orange-600 dark:text-orange-500"
@@ -60,17 +60,17 @@ function ActiveCase({ caseData, onSubmitVote }) {
         <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
           Reported Content
         </h3>
-        <div className="bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-2">
+        <div className="bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg p-4 mb-2">
           <div className="flex items-start gap-2 mb-2">
-            <span className="font-medium text-sm text-gray-800 dark:text-gray-200">
+            <span className="font-medium text-sm text-gray-800 dark:text-indigo-200">
               User:
             </span>
-            <span className="text-sm text-gray-700 dark:text-gray-300">
+            <span className="text-sm text-gray-700 dark:text-indigo-300">
               {caseData.reportedUser}
             </span>
           </div>
-          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded p-3">
-            <p className="text-gray-800 dark:text-gray-300">
+          <div className="bg-white dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded p-3">
+            <p className="text-gray-800 dark:text-indigo-100">
               {caseData.reportedContent}
             </p>
           </div>
@@ -82,7 +82,7 @@ function ActiveCase({ caseData, onSubmitVote }) {
         <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
           Alleged Violation
         </h3>
-        <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-500/30 rounded-lg p-4">
+        <div className="bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 rounded-lg p-4">
           <div className="flex items-start gap-3">
             <div className="flex-1">
               <div className="font-semibold text-red-900 dark:text-red-200 mb-1">
@@ -91,7 +91,7 @@ function ActiveCase({ caseData, onSubmitVote }) {
               <p className="text-sm text-red-800 dark:text-red-300 mb-2">
                 {violatedTerm.description}
               </p>
-              <div className="text-sm text-gray-700 dark:text-gray-300">
+              <div className="text-sm text-gray-700 dark:text-indigo-200">
                 <span className="font-medium">Moderator Notes:</span>{" "}
                 {caseData.moderatorNotes}
               </div>
@@ -101,13 +101,13 @@ function ActiveCase({ caseData, onSubmitVote }) {
       </div>
 
       {/* Voting Interface */}
-      <div className="border-t dark:border-gray-700 pt-6">
+      <div className="border-t dark:border-white/10 pt-6">
         <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-4">
           Your Judgment
         </h3>
 
         <div className="mb-4">
-          <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
+          <p className="text-sm text-gray-700 dark:text-indigo-300 mb-3">
             Do you agree with the moderator that this content violates the Terms
             of Service?
           </p>
@@ -117,7 +117,7 @@ function ActiveCase({ caseData, onSubmitVote }) {
               className={`flex-1 py-3 px-4 rounded-lg border-2 transition-colors ${
                 vote.agrees === true
                   ? "bg-red-100 dark:bg-red-900/50 border-red-500 text-red-900 dark:text-red-200"
-                  : "bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-gray-400 dark:hover:border-gray-500"
+                  : "bg-white dark:bg-white/5 border-gray-300 dark:border-white/10 text-gray-700 dark:text-indigo-100 hover:border-gray-400 dark:hover:border-white/30"
               }`}
             >
               <div className="font-semibold">Agree</div>
@@ -128,7 +128,7 @@ function ActiveCase({ caseData, onSubmitVote }) {
               className={`flex-1 py-3 px-4 rounded-lg border-2 transition-colors ${
                 vote.agrees === false
                   ? "bg-green-100 dark:bg-green-900/50 border-green-500 text-green-900 dark:text-green-200"
-                  : "bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-gray-400 dark:hover:border-gray-500"
+                  : "bg-white dark:bg-white/5 border-gray-300 dark:border-white/10 text-gray-700 dark:text-indigo-100 hover:border-gray-400 dark:hover:border-white/30"
               }`}
             >
               <div className="font-semibold">Disagree</div>
@@ -138,17 +138,17 @@ function ActiveCase({ caseData, onSubmitVote }) {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          <label className="block text-sm font-medium text-gray-700 dark:text-indigo-200 mb-2">
             Explanation (Required) *
           </label>
           <textarea
             value={vote.explanation}
             onChange={(e) => setVote({ ...vote, explanation: e.target.value })}
             placeholder="Explain your reasoning. This will be visible to other jurors after the case concludes."
-            className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 bg-white dark:bg-white/5 border border-gray-300 dark:border-white/10 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:text-indigo-100 dark:placeholder-indigo-300/50"
             rows="4"
           />
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+          <p className="text-xs text-gray-500 dark:text-indigo-300/60 mt-1">
             Your explanation helps maintain transparency and accountability in
             the judgment process.
           </p>
@@ -164,8 +164,8 @@ function ActiveCase({ caseData, onSubmitVote }) {
       </div>
 
       {/* Group Progress */}
-      <div className="mt-6 pt-6 border-t dark:border-gray-700">
-        <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
+      <div className="mt-6 pt-6 border-t dark:border-white/10">
+        <div className="flex items-center justify-between text-sm text-gray-600 dark:text-indigo-300/60">
           <span className="flex items-center gap-2">
             <Users size={16} />
             Group Progress: {userGroup.votes.length}/{userGroup.jurors.length}{" "}
