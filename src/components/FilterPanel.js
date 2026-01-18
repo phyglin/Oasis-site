@@ -1,5 +1,5 @@
-import React from "react";
-import { Pin, Check, Gavel } from "lucide-react";
+import React, { useState } from "react";
+import { Pin, Check, Gavel, ChevronDown, ChevronUp, SlidersHorizontal, CheckSquare, Square } from "lucide-react";
 import { statuses } from "../data/statuses";
 
 function FilterPanel({
@@ -15,63 +15,83 @@ function FilterPanel({
   onMenuChange,
 }) {
   const showFilters = activeMenu === "public-square";
+  const [expandedCase, setExpandedCase] = useState(null);
+
+  const toggleCaseExpansion = (e, caseId) => {
+    e.stopPropagation();
+    setExpandedCase(expandedCase === caseId ? null : caseId);
+  };
 
   return (
-    <div className="w-80 bg-gray-100 dark:bg-black/20 dark:backdrop-blur-xl border-x border-gray-200 dark:border-white/10 p-6 sticky top-0 h-screen overflow-y-auto transition-colors duration-300">
+    <div className="w-80 bg-gray-100 dark:bg-black/20 dark:backdrop-blur-xl border-x border-gray-200 dark:border-white/10 flex flex-col h-screen sticky top-0 transition-colors duration-300">
       {showFilters && (
-        <>
-          <h3 className="font-bold text-gray-800 dark:text-indigo-100 mb-4 text-lg">
-            Filtering
-          </h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-            Select which status types to view:
-          </p>
-
-          <div className="flex gap-2 mb-4">
-            <button
-              onClick={onSelectAll}
-              className="flex-1 px-3 py-2 bg-gray-200 dark:bg-white/10 hover:bg-gray-300 dark:hover:bg-white/20 text-gray-700 dark:text-gray-200 border border-transparent dark:border-white/10 rounded-lg text-sm font-medium transition-all"
-            >
-              Select All
-            </button>
-            <button
-              onClick={onSaveFilter}
-              className="flex-1 px-3 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-indigo-600 dark:hover:bg-indigo-500 text-white rounded-lg text-sm font-medium transition-all"
-            >
-              Save
-            </button>
-          </div>
-
-          <div className="space-y-1">
-            {Object.entries(statuses).map(([key, status]) => (
-              <label
-                key={key}
-                className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-white/5 cursor-pointer transition-colors"
+        <div className="p-6 pb-0 flex-shrink-0">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="font-bold text-gray-800 dark:text-indigo-100 text-lg flex items-center gap-2">
+              <SlidersHorizontal size={18} className="text-gray-500 dark:text-gray-400" />
+              Feed Filters
+            </h3>
+            <div className="flex gap-2">
+              <button
+                onClick={onSelectAll}
+                className="text-xs font-medium text-indigo-600 dark:text-indigo-300 hover:text-indigo-700 dark:hover:text-white transition-colors px-2 py-1 rounded hover:bg-indigo-50 dark:hover:bg-white/10"
               >
-                <input
-                  type="checkbox"
-                  checked={selectedStatuses[key]}
-                  onChange={() => onToggleStatus(key)}
-                  className="w-4 h-4 rounded text-blue-600 dark:text-indigo-500 bg-gray-300 dark:bg-white/5 border-gray-400 dark:border-white/20 focus:ring-indigo-500/40"
-                />
-                <span className={status.color}>{status.icon}</span>
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-200 flex-1">
-                  {status.label}
-                </span>
-              </label>
-            ))}
+                Select All
+              </button>
+              <button
+                onClick={onSaveFilter}
+                className="text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-white/10"
+              >
+                Save
+              </button>
+            </div>
           </div>
-          <div className="mt-6 pt-6 border-t border-gray-200 dark:border-white/10">
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              Showing {filteredCount} of {postsCount} posts
-            </p>
+
+          <div className="space-y-2">
+            {Object.entries(statuses).map(([key, status]) => {
+              const isSelected = selectedStatuses[key];
+              return (
+                <button
+                  key={key}
+                  onClick={() => onToggleStatus(key)}
+                  className={`w-full flex items-center gap-3 p-2 rounded-lg transition-all duration-200 group border ${
+                    isSelected
+                      ? "bg-white dark:bg-white/10 border-gray-200 dark:border-white/10 shadow-sm"
+                      : "bg-transparent border-transparent text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-white/5"
+                  }`}
+                >
+                  <span className={`${isSelected ? status.color : "text-gray-400 dark:text-gray-500"}`}>
+                    {status.icon}
+                  </span>
+                  
+                  <span
+                    className={`text-sm font-medium flex-1 text-left ${
+                      isSelected
+                        ? "text-gray-900 dark:text-white"
+                        : "text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-300"
+                    }`}
+                  >
+                    {status.label}
+                  </span>
+
+                  {isSelected && (
+                    <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 dark:bg-indigo-400"></div>
+                  )}
+                </button>
+              );
+            })}
           </div>
-        </>
+          
+          <div className="mt-4 pt-4 border-t border-gray-200 dark:border-white/10 flex justify-between items-center text-xs text-gray-500 dark:text-gray-400">
+            <span>Active Posts</span>
+            <span className="font-mono bg-gray-200 dark:bg-white/10 px-2 py-1 rounded-full text-gray-700 dark:text-gray-300">
+              {filteredCount} / {postsCount}
+            </span>
+          </div>
+        </div>
       )}
 
-      <div
-        className={`${showFilters ? "mt-8 pt-6 border-t border-gray-200 dark:border-white/10" : ""}`}
-      >
+      <div className={`flex-1 overflow-y-auto p-6 ${showFilters ? "pt-6" : ""}`}>
         {!isVerified ? (
           <>
             <h3 className="font-bold text-gray-800 dark:text-indigo-100 mb-2">
@@ -206,24 +226,121 @@ function FilterPanel({
                 <p className="text-sm font-medium text-gray-800 dark:text-indigo-100 group-hover:text-blue-600 dark:group-hover:text-indigo-300 transition-colors line-clamp-2">
                   Case #495: Impersonation of Public Official
                 </p>
-                <div className="mt-3 flex items-center justify-between">
-                  <div className="flex gap-1">
-                    {[1, 1, 1, 1, 2, 2, 0, 0, 0, 0].map((s, i) => (
-                      <div
-                        key={i}
-                        className={`w-2 h-2 rounded-full ${
-                          s === 1
-                            ? "bg-green-500"
-                            : s === 2
-                              ? "bg-red-500"
-                              : "bg-gray-300 dark:bg-gray-600"
-                        }`}
-                      />
-                    ))}
-                  </div>
-                  <span className="text-[10px] text-blue-600 dark:text-indigo-400 hover:underline">
-                    View 5 Groups
-                  </span>
+                
+                {/* Groups Display */}
+                <div className="mt-3">
+                  {(() => {
+                    const groupsData = [
+                      { 
+                        id: 1, 
+                        name: "Group 1", 
+                        votes: [
+                          { v: 1, reason: "Clear violation." }, { v: 1, reason: "Agreed." }, { v: 1, reason: "Violation." }, 
+                          { v: 1, reason: "Violation." }, { v: 1, reason: "Violation." }, { v: 1, reason: "Violation." }, 
+                          { v: 1, reason: "Violation." }, { v: 2, reason: "Disagree." }, { v: 2, reason: "Disagree." }, 
+                          { v: 1, reason: "Violation." }, { v: 0, reason: "Pending" }, { v: 0, reason: "Pending" }, 
+                          { v: 0, reason: "Pending" }, { v: 0, reason: "Pending" }, { v: 0, reason: "Pending" }
+                        ], 
+                        status: "Deliberating" 
+                      },
+                      { 
+                        id: 2, 
+                        name: "Group 2", 
+                        votes: [
+                          { v: 1, reason: "Violation." }, { v: 1, reason: "Yes, suspend." }, { v: 2, reason: "Satire." }, 
+                          { v: 2, reason: "Context matters." }, { v: 1, reason: "Leaning yes." }, { v: 1, reason: "Yes." }, 
+                          { v: 2, reason: "No." }, { v: 2, reason: "No." }, { v: 1, reason: "Yes." }, 
+                          { v: 1, reason: "Yes." }, { v: 2, reason: "No." }, { v: 1, reason: "Yes." }, 
+                          { v: 0, reason: "Pending" }, { v: 0, reason: "Pending" }, { v: 0, reason: "Pending" }
+                        ], 
+                        status: "Split" 
+                      },
+                      { 
+                        id: 3, 
+                        name: "Group 3", 
+                        votes: [
+                          { v: 2, reason: "Joke." }, { v: 2, reason: "Not a violation." }, { v: 2, reason: "Free speech." }, 
+                          { v: 2, reason: "No history." }, { v: 2, reason: "Agreed." }, { v: 2, reason: "Safe." }, 
+                          { v: 2, reason: "No." }, { v: 2, reason: "No." }, { v: 2, reason: "No." }, 
+                          { v: 2, reason: "No." }, { v: 2, reason: "No." }, { v: 2, reason: "No." }, 
+                          { v: 2, reason: "No." }, { v: 2, reason: "No." }, { v: 0, reason: "Pending" }
+                        ], 
+                        status: "Unanimous No", 
+                        isUserGroup: true 
+                      },
+                      { 
+                        id: 4, 
+                        name: "Group 4", 
+                        votes: [
+                          { v: 1, reason: "Violation." }, { v: 1, reason: "Violation." }, { v: 1, reason: "Violation." }, 
+                          { v: 1, reason: "Violation." }, { v: 1, reason: "Violation." }, { v: 1, reason: "Violation." }, 
+                          { v: 1, reason: "Violation." }, { v: 1, reason: "Violation." }, { v: 1, reason: "Violation." }, 
+                          { v: 1, reason: "Violation." }, { v: 1, reason: "Violation." }, { v: 1, reason: "Violation." }, 
+                          { v: 1, reason: "Violation." }, { v: 1, reason: "Violation." }, { v: 1, reason: "Violation." }
+                        ], 
+                        status: "Unanimous Yes" 
+                      },
+                      { 
+                        id: 5, 
+                        name: "Group 5", 
+                        votes: Array(15).fill({ v: 0, reason: "Pending..." }), 
+                        status: "Waiting" 
+                      },
+                    ];
+
+                    const groupsToShow = expandedCase === 495 ? groupsData : groupsData.filter(g => g.isUserGroup);
+
+                    return (
+                      <>
+                        <div className={`space-y-3 ${expandedCase === 495 ? "pt-3 border-t border-gray-200 dark:border-white/10" : ""}`}>
+                          {groupsToShow.map((group) => (
+                            <div key={group.id} className={`flex flex-col gap-1 ${group.isUserGroup && expandedCase === 495 ? "bg-indigo-50 dark:bg-indigo-500/20 p-2 rounded -mx-2 border border-indigo-100 dark:border-indigo-500/30" : ""}`}>
+                              <div className="flex justify-between items-center text-xs">
+                                <span className={`font-medium ${group.isUserGroup ? "text-indigo-700 dark:text-indigo-300" : "text-gray-700 dark:text-gray-300"}`}>
+                                  {group.name} {group.isUserGroup && <span className="text-[10px] opacity-70">(You)</span>}
+                                </span>
+                                <span className="text-gray-500 dark:text-gray-400">{group.status}</span>
+                              </div>
+                              <div className="flex gap-1">
+                                {group.votes.map((vote, i) => (
+                                  <div
+                                    key={i}
+                                    className="flex-1 relative group/vote py-1"
+                                  >
+                                    <div
+                                      className={`h-1.5 w-full rounded-full ${
+                                        vote.v === 1
+                                          ? "bg-green-500"
+                                          : vote.v === 2
+                                            ? "bg-red-500"
+                                            : "bg-gray-200 dark:bg-gray-700"
+                                      }`}
+                                    />
+                                    {vote.v !== 0 && (
+                                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover/vote:block w-32 p-2 bg-gray-900 text-white text-[10px] rounded shadow-lg z-50 pointer-events-none">
+                                        {vote.reason}
+                                        <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900"></div>
+                                      </div>
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="mt-3 flex items-center justify-end">
+                          <button
+                            onClick={(e) => toggleCaseExpansion(e, 495)}
+                            className="text-[10px] text-blue-600 dark:text-indigo-400 hover:underline flex items-center gap-1"
+                          >
+                            {expandedCase === 495 ? "Hide Groups" : "View 5 Groups"}
+                            {expandedCase === 495 ? <ChevronUp size={10} /> : <ChevronDown size={10} />}
+                          </button>
+                        </div>
+                      </>
+                    );
+                  })()}
                 </div>
               </div>
 
