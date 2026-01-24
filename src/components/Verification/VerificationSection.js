@@ -1,5 +1,5 @@
 import React from "react";
-import { ScanFace, CreditCard, Users, Shield } from "lucide-react";
+import { ScanFace, CreditCard, Shield } from "lucide-react";
 import VerificationMethodCard from "./VerificationMethodCard";
 
 function VerificationSection() {
@@ -21,7 +21,7 @@ function VerificationSection() {
       </div>
 
       <div className="px-6 pb-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12 max-w-4xl mx-auto">
           <VerificationMethodCard
             icon={ScanFace}
             title="Biometric Liveness"
@@ -34,12 +34,6 @@ function VerificationSection() {
             title="Government ID"
             description="Upload a photo of your passport or driver's license. Standard verification for high-trust roles."
             onSelect={() => handleSelect("gov-id")}
-          />
-          <VerificationMethodCard
-            icon={Users}
-            title="Social Vouch"
-            description="Get vouched for by 3 existing verified Oasis members who know you in real life. Build your web of trust."
-            onSelect={() => handleSelect("social")}
           />
         </div>
 
